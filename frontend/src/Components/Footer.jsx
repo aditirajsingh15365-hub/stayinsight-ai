@@ -1,14 +1,7 @@
 function Footer() {
   return (
-    <footer
-      style={{
-        background: "#071A52",
-        color: "white",
-        textAlign: "center",
-        padding: "20px",
-      }}
-    >
-      <p>© 2026 StayInsight AI. All rights reserved.</p>
+    <footer className="border-t border-slate-800 bg-slate-950 text-center py-6 text-slate-500">
+      © 2026 StayInsight AI
     </footer>
   );
 }
