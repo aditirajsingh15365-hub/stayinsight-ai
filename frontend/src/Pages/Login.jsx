@@ -1,9 +1,15 @@
 import { useState } from "react";
+import { useTheme } from "../context/ThemeContext";
+
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import ThemeLayout from "../components/ThemeLayout";
+
 import { Button, Input } from "../components/ui";
 
 function Login() {
+  const { darkMode } = useTheme();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -16,27 +22,35 @@ function Login() {
     });
   };
 
+  const cardStyle = darkMode
+    ? "bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl shadow-cyan-500/10"
+    : "bg-white border border-slate-200 shadow-xl";
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-950 to-blue-950 text-white">
+    <ThemeLayout>
       <Navbar />
 
       <main className="max-w-md mx-auto px-6 py-20">
 
-        <div className="
-          bg-white/5
-          backdrop-blur-xl
-          border border-white/10
-          rounded-3xl
-          p-8
-          shadow-2xl
-          shadow-cyan-500/10
-        ">
+        <div className={`${cardStyle} rounded-3xl p-8`}>
 
-          <h1 className="text-3xl font-bold mb-2">
+          <h1
+            className={`text-3xl font-bold mb-2 ${
+              darkMode
+                ? "text-white"
+                : "text-slate-900"
+            }`}
+          >
             Welcome Back
           </h1>
 
-          <p className="text-slate-400 mb-8">
+          <p
+            className={`mb-8 ${
+              darkMode
+                ? "text-slate-400"
+                : "text-slate-600"
+            }`}
+          >
             Sign in to StayInsight AI
           </p>
 
@@ -66,7 +80,7 @@ function Login() {
             />
 
             <Button type="submit">
-              Login
+              Log in
             </Button>
 
           </form>
@@ -76,7 +90,7 @@ function Login() {
       </main>
 
       <Footer />
-    </div>
+    </ThemeLayout>
   );
 }
 

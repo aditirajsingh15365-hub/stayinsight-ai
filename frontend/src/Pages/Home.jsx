@@ -2,8 +2,12 @@ import Navbar from "../components/Navbar";
 import Hero from "../components/Hero";
 import Card from "../components/Card";
 import Footer from "../components/Footer";
+import ThemeLayout from "../components/ThemeLayout";
+import { useTheme } from "../context/ThemeContext";
 
 function Home() {
+  const { darkMode } = useTheme();
+
   const features = [
     {
       title: "Sentiment Analysis",
@@ -26,18 +30,41 @@ function Home() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-950 to-blue-950">
+    <ThemeLayout>
       <Navbar />
 
       <Hero />
 
       <section className="max-w-7xl mx-auto px-6 pt-8 pb-20">
         <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mt-6">
-             AI Integrated Tools
+
+          <span
+            className={`font-semibold ${
+              darkMode
+                ? "text-cyan-400"
+                : "text-cyan-600"
+            }`}
+          >
+            AI Powered Features
+          </span>
+
+          <h2
+            className={`text-4xl md:text-5xl font-bold mt-4 ${
+              darkMode
+                ? "text-white"
+                : "text-slate-900"
+            }`}
+          >
+            AI Integrated Tools
           </h2>
 
-          <p className="text-slate-400 mt-4 max-w-2xl mx-auto text-lg">
+          <p
+            className={`mt-4 max-w-2xl mx-auto text-lg ${
+              darkMode
+                ? "text-slate-400"
+                : "text-slate-600"
+            }`}
+          >
             Analyze guest feedback, discover trends, and generate
             actionable insights to improve hospitality experiences.
           </p>
@@ -56,7 +83,7 @@ function Home() {
       </section>
 
       <Footer />
-    </div>
+    </ThemeLayout>
   );
 }
 

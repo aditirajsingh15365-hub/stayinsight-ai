@@ -1,3 +1,5 @@
+import { useTheme } from "../../context/ThemeContext";
+
 /**
  * Input Component
  * Props:
@@ -14,10 +16,19 @@ function Input({
   onChange,
   type = "text",
 }) {
+  const { darkMode } = useTheme();
+
   return (
     <div className="w-full">
+
       {label && (
-        <label className="block mb-2 text-slate-300">
+        <label
+          className={`block mb-2 ${
+            darkMode
+              ? "text-slate-300"
+              : "text-slate-700"
+          }`}
+        >
           {label}
         </label>
       )}
@@ -27,17 +38,21 @@ function Input({
         value={value}
         placeholder={placeholder}
         onChange={onChange}
-        className="
+        className={`
           w-full
-          bg-slate-900/50
-          border border-white/10
           rounded-xl
           px-4 py-3
-          text-white
           outline-none
-          focus:border-cyan-400
-        "
+          transition-all
+          duration-300
+          ${
+            darkMode
+              ? "bg-slate-900/50 border border-white/10 text-white placeholder:text-slate-500 focus:border-cyan-400"
+              : "bg-white border border-slate-300 text-slate-900 placeholder:text-slate-400 focus:border-cyan-500"
+          }
+        `}
       />
+
     </div>
   );
 }

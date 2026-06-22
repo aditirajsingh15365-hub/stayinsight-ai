@@ -1,3 +1,5 @@
+import { useTheme } from "../../context/ThemeContext";
+
 /**
  * Modal Component
  * Props:
@@ -11,6 +13,8 @@ function Modal({
   onClose,
   children,
 }) {
+  const { darkMode } = useTheme();
+
   if (!isOpen) return null;
 
   return (
@@ -26,14 +30,17 @@ function Modal({
       "
     >
       <div
-        className="
-          bg-slate-900
-          border border-white/10
-          rounded-3xl
-          p-8
+        className={`
           w-full
           max-w-md
-        "
+          rounded-3xl
+          p-8
+          ${
+            darkMode
+              ? "bg-slate-900 border border-white/10 text-white"
+              : "bg-white border border-slate-300 text-slate-900 shadow-xl"
+          }
+        `}
       >
         {children}
 
@@ -41,10 +48,14 @@ function Modal({
           onClick={onClose}
           className="
             mt-6
-            bg-cyan-500
             px-5
             py-2
             rounded-xl
+            bg-cyan-500
+            hover:bg-cyan-400
+            text-white
+            transition-all
+            duration-300
           "
         >
           Close
