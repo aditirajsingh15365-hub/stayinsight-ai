@@ -6,10 +6,12 @@ import AIInsights from "./pages/AIInsights";
 import ReviewAnalyzer from "./pages/ReviewAnalyzer";
 import About from "./pages/About";
 import Login from "./pages/Login";
+import ComponentShowcase from "./pages/ComponentShowcase";
 
 function App() {
   return (
     <Routes>
+      <Route path="/components"element={<ComponentShowcase />}/>
       <Route path="/login" element={<Login />} />
       <Route path="/" element={<Home />} />
       <Route path="/dashboard" element={<Dashboard />} />
