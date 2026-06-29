@@ -13,9 +13,7 @@ from services.review_store import reviews
 
 from exceptions import ReviewNotFoundException
 
-
 router = APIRouter()
-
 
 # -----------------------------
 # CRUD ENDPOINTS
@@ -24,6 +22,21 @@ router = APIRouter()
 @router.get("/reviews")
 def get_reviews():
     return reviews
+
+
+# IMPORTANT:
+# Put search BEFORE /reviews/{review_id}
+@router.get("/reviews/search")
+def search_reviews(q: str):
+
+    results = []
+
+    for review in reviews:
+
+        if q.lower() in review["review"].lower():
+            results.append(review)
+
+    return results
 
 
 @router.get("/reviews/{review_id}")
@@ -86,19 +99,6 @@ def delete_review(review_id: int):
     raise ReviewNotFoundException()
 
 
-@router.get("/reviews/search")
-def search_reviews(q: str):
-
-    results = []
-
-    for review in reviews:
-
-        if q.lower() in review["review"].lower():
-            results.append(review)
-
-    return results
-
-
 # -----------------------------
 # REVIEW ANALYZER ENDPOINTS
 # -----------------------------
@@ -121,4 +121,3 @@ def generate_response():
         "response":
         "Thank you for your feedback. We appreciate your comments and will work on improving our service."
     }
-
