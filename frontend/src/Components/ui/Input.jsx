@@ -23,10 +23,10 @@ function Input({
 
       {label && (
         <label
-          className={`block mb-2 ${
+          className={`block mb-2 font-medium ${
             darkMode
-              ? "text-slate-300"
-              : "text-slate-700"
+              ? "text-[#C8B8A6]"
+              : "text-[#61554E]"
           }`}
         >
           {label}
@@ -41,14 +41,27 @@ function Input({
         className={`
           w-full
           rounded-xl
-          px-4 py-3
+          px-4
+          py-3
           outline-none
           transition-all
           duration-300
           ${
             darkMode
-              ? "bg-slate-900/50 border border-white/10 text-white placeholder:text-slate-500 focus:border-cyan-400"
-              : "bg-white border border-slate-300 text-slate-900 placeholder:text-slate-400 focus:border-cyan-500"
+              ? `
+                bg-[#221C18]
+                border border-[#3A302A]
+                text-[#F7F1EA]
+                placeholder:text-[#8B7B6E]
+                focus:border-[#C85A32]
+              `
+              : `
+                bg-white
+                border border-[#E8DDD2]
+                text-[#26211E]
+                placeholder:text-[#A09082]
+                focus:border-[#C85A32]
+              `
           }
         `}
       />

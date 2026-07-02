@@ -2,61 +2,69 @@ import { Link } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext";
 
 function Card({ title, description, link }) {
-const { darkMode } = useTheme();
+  const { darkMode } = useTheme();
 
-return ( <Link
-   to={link}
-   className="block h-full"
-   aria-label={title}
- >
-<div
-className={`h-full rounded-3xl p-6 transition-all duration-300 hover:-translate-y-2
-        ${
+  return (
+    <Link
+      to={link}
+      className="block h-full"
+      aria-label={title}
+    >
+      <div
+        className={`h-full rounded-3xl p-8 transition-all duration-300 hover:-translate-y-2 ${
           darkMode
             ? `
-bg-white/5
-backdrop-blur-xl
-border border-white/10
-shadow-2xl
-shadow-cyan-500/10
-hover:border-cyan-400/40
-hover:bg-white/10
-`            :`
-bg-white
-border border-slate-200
-shadow-lg
-hover:border-cyan-400
-hover:shadow-xl
-`
+              bg-[#312924]
+              border border-[#3A302A]
+              shadow-sm
+              shadow-black/20
+              hover:border-[#C85A32]/40
+            `
+            : `
+              bg-white
+              border border-[#EFE5DA]
+              shadow-sm
+              shadow-[#26211E]/5
+              hover:border-[#C85A32]/20
+            `
         }`}
->
-<h3
-className={`text-xl font-semibold ${
+      >
+        {/* Title */}
+
+        <h3
+          className={`text-2xl font-semibold font-serif ${
             darkMode
-              ? "text-white"
-              : "text-slate-900"
+              ? "text-[#F7F1EA]"
+              : "text-[#26211E]"
           }`}
->
-{title} </h3>
+          style={{
+            fontFamily:
+              "'Playfair Display', Georgia, serif",
+          }}
+        >
+          {title}
+        </h3>
 
-    <p
-      className={`mt-3 ${
-        darkMode
-          ? "text-slate-400"
-          : "text-slate-600"
-      }`}
-    >
-      {description}
-    </p>
+        {/* Description */}
 
-    <div className="mt-6 text-cyan-500 font-medium">
-      Explore →
-    </div>
-  </div>
-</Link>
+        <p
+          className={`mt-4 leading-relaxed ${
+            darkMode
+              ? "text-[#C8B8A6]"
+              : "text-[#61554E]"
+          }`}
+        >
+          {description}
+        </p>
 
+        {/* CTA */}
 
-);
+        <div className="mt-6 text-[#C85A32] font-medium">
+          Learn More →
+        </div>
+      </div>
+    </Link>
+  );
 }
 
 export default Card;

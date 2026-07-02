@@ -27,6 +27,7 @@ function Modal({
         items-center
         justify-center
         z-50
+        px-4
       "
     >
       <div
@@ -35,10 +36,22 @@ function Modal({
           max-w-md
           rounded-3xl
           p-8
+          transition-all
+          duration-300
           ${
             darkMode
-              ? "bg-slate-900 border border-white/10 text-white"
-              : "bg-white border border-slate-300 text-slate-900 shadow-xl"
+              ? `
+                bg-[#312924]
+                border border-[#3A302A]
+                text-[#F7F1EA]
+              `
+              : `
+                bg-white
+                border border-[#EFE5DA]
+                text-[#26211E]
+                shadow-sm
+                shadow-[#26211E]/5
+              `
           }
         `}
       >
@@ -50,9 +63,9 @@ function Modal({
             mt-6
             px-5
             py-2
-            rounded-xl
-            bg-cyan-500
-            hover:bg-cyan-400
+            rounded-lg
+            bg-[#C85A32]
+            hover:bg-[#B44D28]
             text-white
             transition-all
             duration-300

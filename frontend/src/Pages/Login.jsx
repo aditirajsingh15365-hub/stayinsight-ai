@@ -23,8 +23,18 @@ function Login() {
   };
 
   const cardStyle = darkMode
-    ? "bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl shadow-cyan-500/10"
-    : "bg-white border border-slate-200 shadow-xl";
+    ? `
+      bg-[#312924]
+      border border-[#3A302A]
+      shadow-sm
+      shadow-black/20
+    `
+    : `
+      bg-white
+      border border-[#EFE5DA]
+      shadow-sm
+      shadow-[#26211E]/5
+    `;
 
   return (
     <ThemeLayout>
@@ -34,25 +44,38 @@ function Login() {
 
         <div className={`${cardStyle} rounded-3xl p-8`}>
 
-          <h1
-            className={`text-3xl font-bold mb-2 ${
-              darkMode
-                ? "text-white"
-                : "text-slate-900"
-            }`}
-          >
-            Welcome Back
-          </h1>
+          <div className="text-center">
 
-          <p
-            className={`mb-8 ${
-              darkMode
-                ? "text-slate-400"
-                : "text-slate-600"
-            }`}
-          >
-            Sign in to StayInsight AI
-          </p>
+            <span className="text-[#C85A32] font-medium">
+              Welcome Back
+            </span>
+
+            <h1
+              className={`mt-3 text-4xl font-bold font-serif ${
+                darkMode
+                  ? "text-[#F7F1EA]"
+                  : "text-[#26211E]"
+              }`}
+              style={{
+                fontFamily:
+                  "'Playfair Display', Georgia, serif",
+              }}
+            >
+              Sign In to StayInsight AI
+            </h1>
+
+            <p
+              className={`mt-4 mb-8 ${
+                darkMode
+                  ? "text-[#C8B8A6]"
+                  : "text-[#61554E]"
+              }`}
+            >
+              Access guest insights, hospitality analytics,
+              and personalized recommendations.
+            </p>
+
+          </div>
 
           <form
             onSubmit={handleSubmit}
@@ -72,16 +95,18 @@ function Login() {
             <Input
               label="Password"
               type="password"
-              placeholder="Enter password"
+              placeholder="Enter your password"
               value={password}
               onChange={(e) =>
                 setPassword(e.target.value)
               }
             />
 
-            <Button type="submit">
-              Log in
-            </Button>
+            <div className="pt-2">
+              <Button type="submit">
+                Log In
+              </Button>
+            </div>
 
           </form>
 

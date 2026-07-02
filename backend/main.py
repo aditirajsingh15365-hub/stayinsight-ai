@@ -1,16 +1,21 @@
+
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from routes.review import router as review_router
 from routes.dashboard import router as dashboard_router
 from routes.insights import router as insights_router
-from fastapi.middleware.cors import CORSMiddleware
+from database.connection import engine
+from database.models import Base
 from exceptions import (
     ReviewNotFoundException,
     review_not_found_handler
 )
+Base.metadata.create_all(bind=engine)
 app = FastAPI(
     title="StayInsight AI Backend",
     version="1.0.0"
 )
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
@@ -21,16 +26,20 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-app.include_router(review_router)
-app.include_router(review_router)
-app.include_router(dashboard_router)
-app.include_router(insights_router)
+
 app.add_exception_handler(
     ReviewNotFoundException,
     review_not_found_handler
 )
+
+app.include_router(review_router)
+app.include_router(dashboard_router)
+app.include_router(insights_router)
+
+
 @app.get("/")
 def root():
     return {
         "message": "StayInsight AI Backend Running"
     }
+

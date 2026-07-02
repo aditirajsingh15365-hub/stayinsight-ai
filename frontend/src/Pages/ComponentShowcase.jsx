@@ -21,8 +21,8 @@ function ComponentShowcase() {
   const [showToast, setShowToast] = useState(false);
 
   const cardStyle = darkMode
-    ? "bg-white/5 border border-white/10"
-    : "bg-white border border-slate-200 shadow-lg";
+    ? "bg-[#312924] border border-[#3A302A]"
+    : "bg-white border border-[#EFE5DA] shadow-sm shadow-[#26211E]/5";
 
   return (
     <ThemeLayout>
@@ -33,24 +33,33 @@ function ComponentShowcase() {
         {/* Header */}
         <div className="mb-10">
 
+          <span className="text-[#C85A32] font-semibold">
+            Design System
+          </span>
+
           <h1
-            className={`text-4xl font-bold mb-3 ${
+            className={`text-4xl md:text-5xl font-bold font-serif mt-3 ${
               darkMode
-                ? "text-white"
-                : "text-slate-900"
+                ? "text-[#F7F1EA]"
+                : "text-[#26211E]"
             }`}
+            style={{
+              fontFamily:
+                "'Playfair Display', Georgia, serif",
+            }}
           >
-            UI Component Library
+            Component Library
           </h1>
 
           <p
-            className={`${
+            className={`mt-4 ${
               darkMode
-                ? "text-slate-400"
-                : "text-slate-600"
+                ? "text-[#C8B8A6]"
+                : "text-[#61554E]"
             }`}
           >
-            Showcase of reusable UI components.
+            Reusable interface elements used throughout
+            StayInsight AI.
           </p>
 
         </div>
@@ -61,14 +70,15 @@ function ComponentShowcase() {
           <h2
             className={`text-2xl font-bold mb-5 ${
               darkMode
-                ? "text-white"
-                : "text-slate-900"
+                ? "text-[#F7F1EA]"
+                : "text-[#26211E]"
             }`}
           >
             Buttons
           </h2>
 
           <div className="flex gap-4 flex-wrap">
+
             <Button>
               Primary Button
             </Button>
@@ -76,6 +86,7 @@ function ComponentShowcase() {
             <Button variant="secondary">
               Secondary Button
             </Button>
+
           </div>
 
         </div>
@@ -86,11 +97,11 @@ function ComponentShowcase() {
           <h2
             className={`text-2xl font-bold mb-5 ${
               darkMode
-                ? "text-white"
-                : "text-slate-900"
+                ? "text-[#F7F1EA]"
+                : "text-[#26211E]"
             }`}
           >
-            Input
+            Input Field
           </h2>
 
           <Input
@@ -110,8 +121,8 @@ function ComponentShowcase() {
           <h2
             className={`text-2xl font-bold mb-5 ${
               darkMode
-                ? "text-white"
-                : "text-slate-900"
+                ? "text-[#F7F1EA]"
+                : "text-[#26211E]"
             }`}
           >
             Loader
@@ -127,8 +138,8 @@ function ComponentShowcase() {
           <h2
             className={`text-2xl font-bold mb-5 ${
               darkMode
-                ? "text-white"
-                : "text-slate-900"
+                ? "text-[#F7F1EA]"
+                : "text-[#26211E]"
             }`}
           >
             Modal
@@ -150,11 +161,11 @@ function ComponentShowcase() {
           <h2
             className={`text-2xl font-bold mb-5 ${
               darkMode
-                ? "text-white"
-                : "text-slate-900"
+                ? "text-[#F7F1EA]"
+                : "text-[#26211E]"
             }`}
           >
-            Toast
+            Toast Notification
           </h2>
 
           <Button
@@ -181,8 +192,8 @@ function ComponentShowcase() {
           <h2
             className={`text-2xl font-bold ${
               darkMode
-                ? "text-white"
-                : "text-slate-900"
+                ? "text-[#F7F1EA]"
+                : "text-[#26211E]"
             }`}
           >
             Demo Modal
@@ -191,19 +202,20 @@ function ComponentShowcase() {
           <p
             className={`mt-3 ${
               darkMode
-                ? "text-slate-300"
-                : "text-slate-600"
+                ? "text-[#C8B8A6]"
+                : "text-[#61554E]"
             }`}
           >
             This modal demonstrates the reusable
-            modal component.
+            modal component used throughout the
+            platform.
           </p>
         </Modal>
 
         {/* Toast Component */}
         {showToast && (
           <Toast
-            message="Toast component working successfully!"
+            message="Component library is working successfully!"
           />
         )}
 

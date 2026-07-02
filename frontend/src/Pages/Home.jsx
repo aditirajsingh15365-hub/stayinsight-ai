@@ -10,21 +10,21 @@ function Home() {
 
   const features = [
     {
-      title: "Sentiment Analysis",
+      title: "Understand the Vibe",
       description:
-        "Automatically detect guest emotions from reviews.",
+        "Uncover the subtle emotions behind every review. Know exactly how your guests feel about the welcome, the ambiance, and the details.",
       link: "/review-analyzer",
     },
     {
-      title: "AI Recommendations",
+      title: "Elevate Every Stay",
       description:
-        "Receive AI-powered suggestions to improve guest experience.",
+        "Get tailored, practical suggestions for improving your guest experience, curated from hundreds of specific guest insights.",
       link: "/ai-insights",
     },
     {
-      title: "Review Summarization",
+      title: "Get the Full Story, Fast",
       description:
-        "Instantly summarize praise and complaints.",
+        "Save hours by getting a comprehensive, balanced snapshot of your monthly feedback. Focus on hosting, not data entry.",
       link: "/dashboard",
     },
   ];
@@ -35,40 +35,43 @@ function Home() {
 
       <Hero />
 
-      <section className="max-w-7xl mx-auto px-6 pt-8 pb-20">
-        <div className="text-center mb-12">
-
-          <span
-            className={`font-semibold ${
-              darkMode
-                ? "text-cyan-400"
-                : "text-cyan-600"
-            }`}
-          >
-            AI Powered Features
-          </span>
+      <section className="max-w-7xl mx-auto px-6 pt-8 pb-24">
+        <div className="text-center mb-14">
+          
+          {/* Section Heading */}
 
           <h2
-            className={`text-4xl md:text-5xl font-bold mt-4 ${
+            className={`mt-4 text-4xl md:text-5xl font-bold font-serif ${
               darkMode
-                ? "text-white"
-                : "text-slate-900"
+                ? "text-[#F7F1EA]"
+                : "text-[#26211E]"
             }`}
+            style={{
+              fontFamily:
+                "'Playfair Display', Georgia, serif",
+            }}
           >
-            AI Integrated Tools
+            Hospitality-First Insights.
           </h2>
 
+          {/* Section Description */}
+
           <p
-            className={`mt-4 max-w-2xl mx-auto text-lg ${
+            className={`mt-5 max-w-3xl mx-auto text-lg leading-relaxed ${
               darkMode
-                ? "text-slate-400"
-                : "text-slate-600"
+                ? "text-[#C8B8A6]"
+                : "text-[#61554E]"
             }`}
           >
-            Analyze guest feedback, discover trends, and generate
-            actionable insights to improve hospitality experiences.
+            Transform guest feedback into meaningful actions.
+            Discover what guests truly value, identify
+            opportunities for improvement, and create
+            experiences that keep visitors coming back.
           </p>
+
         </div>
+
+        {/* Feature Cards */}
 
         <div className="grid md:grid-cols-3 gap-8">
           {features.map((feature) => (

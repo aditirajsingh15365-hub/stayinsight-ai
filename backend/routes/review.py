@@ -1,4 +1,5 @@
-from fastapi import APIRouter, status
+from fastapi import APIRouter, status, Depends
+from sqlalchemy.orm import Session
 
 from schemas.review_schema import (
     ReviewRequest,
@@ -9,7 +10,8 @@ from services.review_service import (
     analyze_review_service
 )
 
-from services.review_store import reviews
+from database.models import Review
+from database.dependencies import get_db
 
 from exceptions import ReviewNotFoundException
 
@@ -20,47 +22,78 @@ router = APIRouter()
 # -----------------------------
 
 @router.get("/reviews")
-def get_reviews():
-    return reviews
+def get_reviews(
+    db: Session = Depends(get_db)
+):
+    return db.query(Review).all()
 
 
-# IMPORTANT:
-# Put search BEFORE /reviews/{review_id}
 @router.get("/reviews/search")
-def search_reviews(q: str):
-
-    results = []
-
-    for review in reviews:
-
-        if q.lower() in review["review"].lower():
-            results.append(review)
-
-    return results
+def search_reviews(
+    q: str,
+    db: Session = Depends(get_db)
+):
+    return (
+        db.query(Review)
+        .filter(
+            Review.review_text.ilike(
+                f"%{q}%"
+            )
+        )
+        .all()
+    )
 
 
 @router.get("/reviews/{review_id}")
-def get_review(review_id: int):
+def get_review(
+    review_id: int,
+    db: Session = Depends(get_db)
+):
 
-    for review in reviews:
-        if review["id"] == review_id:
-            return review
+    review = (
+        db.query(Review)
+        .filter(
+            Review.id == review_id
+        )
+        .first()
+    )
 
-    raise ReviewNotFoundException()
+    if not review:
+        raise ReviewNotFoundException()
+
+    return review
 
 
 @router.post(
     "/reviews",
     status_code=status.HTTP_201_CREATED
 )
-def create_review(review: dict):
+def create_review(
+    review: dict,
+    db: Session = Depends(get_db)
+):
 
-    new_review = {
-        "id": len(reviews) + 1,
-        **review
-    }
+    new_review = Review(
+        review_text=review["review"],
+        sentiment=review.get(
+            "sentiment",
+            "Neutral"
+        ),
+        theme=review.get(
+            "theme",
+            "General"
+        ),
+        priority=review.get(
+            "priority",
+            "Low"
+        )
+    )
 
-    reviews.append(new_review)
+    db.add(new_review)
+
+    db.commit()
+
+    db.refresh(new_review)
 
     return new_review
 
@@ -68,35 +101,65 @@ def create_review(review: dict):
 @router.put("/reviews/{review_id}")
 def update_review(
     review_id: int,
-    updated_review: dict
+    updated_review: dict,
+    db: Session = Depends(get_db)
 ):
 
-    for review in reviews:
+    review = (
+        db.query(Review)
+        .filter(
+            Review.id == review_id
+        )
+        .first()
+    )
 
-        if review["id"] == review_id:
+    if not review:
+        raise ReviewNotFoundException()
 
-            review.update(updated_review)
+    if "review" in updated_review:
+        review.review_text = updated_review["review"]
 
-            return review
+    if "sentiment" in updated_review:
+        review.sentiment = updated_review["sentiment"]
 
-    raise ReviewNotFoundException()
+    if "theme" in updated_review:
+        review.theme = updated_review["theme"]
+
+    if "priority" in updated_review:
+        review.priority = updated_review["priority"]
+
+    db.commit()
+
+    db.refresh(review)
+
+    return review
 
 
 @router.delete(
     "/reviews/{review_id}",
     status_code=status.HTTP_204_NO_CONTENT
 )
-def delete_review(review_id: int):
+def delete_review(
+    review_id: int,
+    db: Session = Depends(get_db)
+):
 
-    for review in reviews:
+    review = (
+        db.query(Review)
+        .filter(
+            Review.id == review_id
+        )
+        .first()
+    )
 
-        if review["id"] == review_id:
+    if not review:
+        raise ReviewNotFoundException()
 
-            reviews.remove(review)
+    db.delete(review)
 
-            return
+    db.commit()
 
-    raise ReviewNotFoundException()
+    return
 
 
 # -----------------------------
@@ -107,7 +170,9 @@ def delete_review(review_id: int):
     "/analyze-review",
     response_model=ReviewResponse
 )
-def analyze_review(review: ReviewRequest):
+def analyze_review(
+    review: ReviewRequest
+):
 
     return analyze_review_service(
         review.review

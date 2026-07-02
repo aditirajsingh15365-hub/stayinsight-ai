@@ -1,227 +1,298 @@
+import { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import ThemeLayout from "../components/ThemeLayout";
 import { useTheme } from "../context/ThemeContext";
 
 function AIInsights() {
-const { darkMode } = useTheme();
+  const { darkMode } = useTheme();
 
-const insightsData = {
-summary:
-"Guest reviews indicate strong satisfaction with hospitality, cleanliness, and the scenic environment. The majority of visitors highlight friendly hosts and personalized experiences. Areas requiring attention include WiFi connectivity, parking guidance, and occasional delays during check-in.",
+  const [insightsData, setInsightsData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-strengths: [
-  "Friendly Hosts",
-  "Clean Rooms",
-  "Great Food",
-  "Scenic Location",
-  "Personalized Hospitality",
-],
+  useEffect(() => {
+    const fetchInsights = async () => {
+      try {
+        const insightsResponse = await fetch(
+          "http://127.0.0.1:8000/insights/"
+        );
 
-issues: [
-  "WiFi Connectivity",
-  "Check-In Delays",
-  "Parking Information",
-  "Limited Evening Activities",
-],
+        const recommendationsResponse = await fetch(
+          "http://127.0.0.1:8000/insights/recommendations"
+        );
 
-recommendations: [
-  "Upgrade Internet Infrastructure",
-  "Optimize Check-In Workflow",
-  "Provide Parking Instructions",
-  "Create Digital Guest Guide",
-  "Introduce Activity Recommendations",
-],
+        const insights = await insightsResponse.json();
+        const recommendations =
+          await recommendationsResponse.json();
 
-metrics: {
-  sentimentAccuracy: 94,
-  themeDetection: 91,
-  recommendationQuality: 89,
-},
+        setInsightsData({
+          ...insights,
+          recommendations:
+            recommendations.recommendations,
+        });
+      } catch (error) {
+        console.error(
+          "Insights API Error:",
+          error
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
 
-};
+    fetchInsights();
+  }, []);
 
-const cardStyle = darkMode
-? "bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl shadow-cyan-500/10"
-: "bg-white border border-slate-200 shadow-lg";
+  const cardStyle = darkMode
+    ? "bg-[#312924] border border-[#3A302A]"
+    : "bg-white border border-[#EFE5DA] shadow-sm shadow-[#26211E]/5";
 
-return ( <ThemeLayout> <Navbar />
+  if (loading) {
+    return (
+      <ThemeLayout>
+        <Navbar />
 
-  <main className="max-w-7xl mx-auto px-6 py-12">
-
-    {/* Header */}
-    <div className="mb-10">
-
-      <span className="text-cyan-500 font-semibold">
-        AI Powered Intelligence
-      </span>
-
-      <h1
-        className={`text-4xl md:text-5xl font-bold mt-3 ${
-          darkMode
-            ? "text-white"
-            : "text-slate-900"
-        }`}
-      >
-        AI Insights Engine
-      </h1>
-
-      <p
-        className={`mt-4 max-w-3xl ${
-          darkMode
-            ? "text-slate-400"
-            : "text-slate-600"
-        }`}
-      >
-        Discover guest satisfaction trends, recurring strengths,
-        operational challenges, and AI-generated recommendations
-        from customer feedback.
-      </p>
-
-    </div>
-
-    {/* Summary */}
-    <div className={`${cardStyle} rounded-3xl p-8`}>
-
-      <h2 className="text-2xl font-bold text-cyan-500 mb-3">
-        Guest Experience Summary
-      </h2>
-
-      <p
-        className={`leading-relaxed ${
-          darkMode
-            ? "text-slate-300"
-            : "text-slate-700"
-        }`}
-      >
-        {insightsData.summary}
-      </p>
-
-    </div>
-
-    {/* Main Cards */}
-    <div className="grid md:grid-cols-3 gap-6 mt-10">
-
-      {/* Strengths */}
-      <div
-        className={`${cardStyle} rounded-3xl p-6 hover:-translate-y-2 transition-all duration-300`}
-      >
-        <h2 className="text-xl font-bold text-green-500 mb-5">
-          ✅ Top Strengths
-        </h2>
-
-        <ul
-          className={`space-y-3 ${
-            darkMode
-              ? "text-slate-300"
-              : "text-slate-700"
-          }`}
-        >
-          {insightsData.strengths.map((item) => (
-            <li key={item}>{item}</li>
-          ))}
-        </ul>
-      </div>
-
-      {/* Issues */}
-      <div
-        className={`${cardStyle} rounded-3xl p-6 hover:-translate-y-2 transition-all duration-300`}
-      >
-        <h2 className="text-xl font-bold text-yellow-500 mb-5">
-          ⚠ Common Issues
-        </h2>
-
-        <ul
-          className={`space-y-3 ${
-            darkMode
-              ? "text-slate-300"
-              : "text-slate-700"
-          }`}
-        >
-          {insightsData.issues.map((item) => (
-            <li key={item}>{item}</li>
-          ))}
-        </ul>
-      </div>
-
-      {/* Recommendations */}
-      <div
-        className={`${cardStyle} rounded-3xl p-6 hover:-translate-y-2 transition-all duration-300`}
-      >
-        <h2 className="text-xl font-bold text-cyan-500 mb-5">
-          🚀 AI Recommendations
-        </h2>
-
-        <ul
-          className={`space-y-3 ${
-            darkMode
-              ? "text-slate-300"
-              : "text-slate-700"
-          }`}
-        >
-          {insightsData.recommendations.map((item) => (
-            <li key={item}>{item}</li>
-          ))}
-        </ul>
-      </div>
-
-    </div>
-
-    {/* Metrics */}
-    <div className={`${cardStyle} rounded-3xl p-8 mt-10`}>
-
-      <h2
-        className={`text-2xl font-bold mb-6 ${
-          darkMode
-            ? "text-white"
-            : "text-slate-900"
-        }`}
-      >
-        AI Confidence Metrics
-      </h2>
-
-      <div className="grid md:grid-cols-3 gap-6">
-
-        <div>
-          <p className="text-slate-400">
-            Sentiment Accuracy
-          </p>
-
-          <h3 className="text-4xl font-bold text-cyan-500 mt-2">
-            {insightsData.metrics.sentimentAccuracy}%
-          </h3>
+        <div className="max-w-7xl mx-auto px-6 py-12">
+          <h1
+            className={`text-3xl font-bold ${
+              darkMode
+                ? "text-[#F7F1EA]"
+                : "text-[#26211E]"
+            }`}
+          >
+            Loading Insights...
+          </h1>
         </div>
 
-        <div>
-          <p className="text-slate-400">
-            Theme Detection
-          </p>
+        <Footer />
+      </ThemeLayout>
+    );
+  }
 
-          <h3 className="text-4xl font-bold text-green-500 mt-2">
-            {insightsData.metrics.themeDetection}%
-          </h3>
+  if (!insightsData) {
+    return (
+      <ThemeLayout>
+        <Navbar />
+
+        <div className="max-w-7xl mx-auto px-6 py-12">
+          <h1 className="text-3xl font-bold text-[#8B261E]">
+            Failed to load insights.
+          </h1>
         </div>
 
-        <div>
-          <p className="text-slate-400">
-            Recommendation Quality
+        <Footer />
+      </ThemeLayout>
+    );
+  }
+
+  return (
+    <ThemeLayout>
+      <Navbar />
+
+      <main className="max-w-7xl mx-auto px-6 py-12">
+
+        {/* Header */}
+
+        <div className="mb-10">
+
+          <span className="text-[#C85A32] font-semibold">
+            Guest Experience Intelligence
+          </span>
+
+          <h1
+            className={`text-4xl md:text-5xl font-bold font-serif mt-3 ${
+              darkMode
+                ? "text-[#F7F1EA]"
+                : "text-[#26211E]"
+            }`}
+            style={{
+              fontFamily:
+                "'Playfair Display', Georgia, serif",
+            }}
+          >
+            Guest Experience Insights
+          </h1>
+
+          <p
+            className={`mt-4 max-w-3xl ${
+              darkMode
+                ? "text-[#C8B8A6]"
+                : "text-[#61554E]"
+            }`}
+          >
+            Understand what guests truly value,
+            uncover recurring themes, and discover
+            actionable opportunities to elevate every stay.
           </p>
 
-          <h3 className="text-4xl font-bold text-yellow-500 mt-2">
-            {insightsData.metrics.recommendationQuality}%
-          </h3>
         </div>
 
-      </div>
+        {/* Summary */}
 
-    </div>
+        <div className={`${cardStyle} rounded-3xl p-8`}>
 
-  </main>
+          <h2 className="text-2xl font-bold text-[#C85A32] mb-3">
+            Guest Experience Summary
+          </h2>
 
-  <Footer />
-</ThemeLayout>
+          <p
+            className={`leading-relaxed ${
+              darkMode
+                ? "text-[#C8B8A6]"
+                : "text-[#61554E]"
+            }`}
+          >
+            {insightsData.summary}
+          </p>
 
-);
+        </div>
+
+        {/* Main Cards */}
+
+        <div className="grid md:grid-cols-3 gap-6 mt-10">
+
+          <div
+            className={`${cardStyle} rounded-3xl p-6 hover:-translate-y-2 transition-all duration-300`}
+          >
+            <h2 className="text-xl font-bold text-[#C85A32] mb-5">
+              Guest Favorites
+            </h2>
+
+            <ul
+              className={`space-y-3 ${
+                darkMode
+                  ? "text-[#C8B8A6]"
+                  : "text-[#61554E]"
+              }`}
+            >
+              {insightsData.strengths.map((item) => (
+                <li key={item}>✓ {item}</li>
+              ))}
+            </ul>
+
+          </div>
+
+          <div
+            className={`${cardStyle} rounded-3xl p-6 hover:-translate-y-2 transition-all duration-300`}
+          >
+            <h2 className="text-xl font-bold text-[#8B261E] mb-5">
+              Improvement Opportunities
+            </h2>
+
+            <ul
+              className={`space-y-3 ${
+                darkMode
+                  ? "text-[#C8B8A6]"
+                  : "text-[#61554E]"
+              }`}
+            >
+              {insightsData.issues.map((item) => (
+                <li key={item}>• {item}</li>
+              ))}
+            </ul>
+
+          </div>
+
+          <div
+            className={`${cardStyle} rounded-3xl p-6 hover:-translate-y-2 transition-all duration-300`}
+          >
+            <h2 className="text-xl font-bold text-[#C85A32] mb-5">
+              Recommended Actions
+            </h2>
+
+            <ul
+              className={`space-y-3 ${
+                darkMode
+                  ? "text-[#C8B8A6]"
+                  : "text-[#61554E]"
+              }`}
+            >
+              {insightsData.recommendations.map(
+                (item) => (
+                  <li key={item}>→ {item}</li>
+                )
+              )}
+            </ul>
+
+          </div>
+
+        </div>
+
+        {/* Metrics */}
+
+        <div
+          className={`${cardStyle} rounded-3xl p-8 mt-10`}
+        >
+
+          <h2
+            className={`text-2xl font-bold mb-6 ${
+              darkMode
+                ? "text-[#F7F1EA]"
+                : "text-[#26211E]"
+            }`}
+          >
+            Insight Quality Metrics
+          </h2>
+
+          <div className="grid md:grid-cols-3 gap-6">
+
+            <div>
+              <p className="text-[#61554E]">
+                Sentiment Accuracy
+              </p>
+
+              <h3
+                className={`text-4xl font-bold mt-2 ${
+                  darkMode
+                    ? "text-[#F7F1EA]"
+                    : "text-[#26211E]"
+                }`}
+              >
+                {insightsData.metrics.sentimentAccuracy}%
+              </h3>
+            </div>
+
+            <div>
+              <p className="text-[#61554E]">
+                Theme Detection
+              </p>
+
+              <h3
+                className={`text-4xl font-bold mt-2 ${
+                  darkMode
+                    ? "text-[#F7F1EA]"
+                    : "text-[#26211E]"
+                }`}
+              >
+                {insightsData.metrics.themeDetection}%
+              </h3>
+            </div>
+
+            <div>
+              <p className="text-[#61554E]">
+                Recommendation Quality
+              </p>
+
+              <h3
+                className={`text-4xl font-bold mt-2 ${
+                  darkMode
+                    ? "text-[#F7F1EA]"
+                    : "text-[#26211E]"
+                }`}
+              >
+                {insightsData.metrics.recommendationQuality}%
+              </h3>
+            </div>
+
+          </div>
+
+        </div>
+
+      </main>
+
+      <Footer />
+    </ThemeLayout>
+  );
 }
 
 export default AIInsights;

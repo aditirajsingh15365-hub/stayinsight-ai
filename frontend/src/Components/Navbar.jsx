@@ -14,10 +14,10 @@ function Navbar() {
 
   return (
     <nav
-      className={`sticky top-0 z-50 border-b backdrop-blur-xl ${
+      className={`sticky top-0 z-50 border-b backdrop-blur-xl transition-all duration-300 ${
         darkMode
-          ? "bg-slate-950/80 border-white/10"
-          : "bg-white/80 border-slate-300"
+          ? "bg-[#221C18]/95 border-[#3A302A]"
+          : "bg-[#FAF6F0]/90 border-[#E8DDD2]"
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 py-4">
@@ -26,11 +26,14 @@ function Navbar() {
           {/* Logo */}
           <Link to="/">
             <h1
-              className={`text-2xl font-extrabold tracking-tight ${
-                darkMode ? "text-white" : "text-slate-900"
+              className={`text-2xl font-bold tracking-tight font-serif ${
+                darkMode ? "text-[#F7F1EA]" : "text-[#26211E]"
               }`}
             >
-              StayInsight <span className="text-cyan-500">AI</span>
+              StayInsight{" "}
+              <span className="text-[#C85A32]">
+                AI
+              </span>
             </h1>
           </Link>
 
@@ -43,12 +46,12 @@ function Navbar() {
                 to={item.path}
                 className={({ isActive }) =>
                   isActive
-                    ? "text-cyan-500 border-b-2 border-cyan-500 pb-1 font-medium transition-all duration-300"
+                    ? "text-[#C85A32] border-b-2 border-[#C85A32] pb-1 font-medium transition-all duration-300"
                     : `${
                         darkMode
-                          ? "text-slate-300"
-                          : "text-slate-700"
-                      } hover:text-cyan-500 hover:scale-105 font-medium transition-all duration-300`
+                          ? "text-[#C8B8A6]"
+                          : "text-[#61554E]"
+                      } hover:text-[#C85A32] font-medium transition-all duration-300`
                 }
               >
                 {item.name}
@@ -58,10 +61,10 @@ function Navbar() {
             {/* Theme Toggle */}
             <button
               onClick={toggleTheme}
-              className={`px-4 py-2 rounded-xl border transition-all duration-300 ${
+              className={`px-4 py-2 rounded-lg border transition-all duration-300 ${
                 darkMode
-                  ? "border-white/10 text-white hover:border-cyan-400"
-                  : "border-slate-300 text-slate-900 hover:border-cyan-500"
+                  ? "border-[#4A3D36] text-[#F7F1EA] hover:border-[#C85A32]"
+                  : "border-[#E8DDD2] text-[#26211E] hover:border-[#C85A32]"
               }`}
             >
               {darkMode ? "☀️ Light" : "🌙 Dark"}
@@ -69,14 +72,24 @@ function Navbar() {
 
           </div>
 
-          {/* CTA Button */}
-          {/* CTA Button */}
+          {/* Login Button */}
           <Link
-             to="/login"
-             className="hidden md:block px-5 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 hover:shadow-lg hover:shadow-cyan-500/30 transition-all duration-300 font-medium text-white"
-            >
-           Log in
+            to="/login"
+            className="
+              hidden md:block
+              px-5 py-2
+              rounded-lg
+              bg-[#C85A32]
+              hover:bg-[#B44D28]
+              transition-all
+              duration-300
+              font-medium
+              text-white
+            "
+          >
+            Log in
           </Link>
+
         </div>
 
         {/* Mobile Navigation */}
@@ -88,12 +101,12 @@ function Navbar() {
               to={item.path}
               className={({ isActive }) =>
                 isActive
-                  ? "text-cyan-500 text-sm font-medium"
+                  ? "text-[#C85A32] text-sm font-medium"
                   : `${
                       darkMode
-                        ? "text-slate-300"
-                        : "text-slate-700"
-                    } text-sm hover:text-cyan-500 transition-colors duration-300`
+                        ? "text-[#C8B8A6]"
+                        : "text-[#61554E]"
+                    } text-sm hover:text-[#C85A32] transition-colors duration-300`
               }
             >
               {item.name}
@@ -104,8 +117,8 @@ function Navbar() {
             onClick={toggleTheme}
             className={`px-3 py-1 rounded-lg text-sm border ${
               darkMode
-                ? "border-white/10 text-white"
-                : "border-slate-300 text-slate-900"
+                ? "border-[#4A3D36] text-[#F7F1EA]"
+                : "border-[#E8DDD2] text-[#26211E]"
             }`}
           >
             {darkMode ? "☀️" : "🌙"}

@@ -1,34 +1,31 @@
 import { useTheme } from "../context/ThemeContext";
 
 function ThemeLayout({ children }) {
-const { darkMode } = useTheme();
+  const { darkMode } = useTheme();
 
-return (
-<div
-className={
-darkMode
-? `             min-h-screen
-            bg-gradient-to-b
-            from-slate-950
-            via-slate-950
-            to-blue-950
-            text-white
-            transition-all
-            duration-300
-          `
-: `             min-h-screen
-            bg-gradient-to-b
-            from-cyan-50
-            via-white
-            to-slate-100
-            text-slate-900
-            transition-all
-            duration-300
-          `
-}
->
-{children} </div>
-);
+  return (
+    <div
+      className={
+        darkMode
+          ? `
+              min-h-screen
+              bg-[#221C18]
+              text-[#F7F1EA]
+              transition-all
+              duration-300
+            `
+          : `
+              min-h-screen
+              bg-[#FAF6F0]
+              text-[#26211E]
+              transition-all
+              duration-300
+            `
+      }
+    >
+      {children}
+    </div>
+  );
 }
 
 export default ThemeLayout;
