@@ -12,6 +12,13 @@ function Navbar() {
     { name: "About", path: "/about" },
   ];
 
+  const isLoggedIn = !!localStorage.getItem("token");
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    window.location.href = "/login";
+  };
+
   return (
     <nav
       className={`sticky top-0 z-50 border-b backdrop-blur-xl transition-all duration-300 ${
@@ -27,7 +34,9 @@ function Navbar() {
           <Link to="/">
             <h1
               className={`text-2xl font-bold tracking-tight font-serif ${
-                darkMode ? "text-[#F7F1EA]" : "text-[#26211E]"
+                darkMode
+                  ? "text-[#F7F1EA]"
+                  : "text-[#26211E]"
               }`}
             >
               StayInsight{" "}
@@ -72,23 +81,42 @@ function Navbar() {
 
           </div>
 
-          {/* Login Button */}
-          <Link
-            to="/login"
-            className="
-              hidden md:block
-              px-5 py-2
-              rounded-lg
-              bg-[#C85A32]
-              hover:bg-[#B44D28]
-              transition-all
-              duration-300
-              font-medium
-              text-white
-            "
-          >
-            Log in
-          </Link>
+          {/* Auth Button */}
+          {isLoggedIn ? (
+            <button
+              onClick={handleLogout}
+              className="
+                hidden md:block
+                px-5 py-2
+                rounded-lg
+                bg-[#8B261E]
+                hover:bg-[#701D18]
+                transition-all
+                duration-300
+                font-medium
+                text-white
+              "
+            >
+              Logout
+            </button>
+          ) : (
+            <Link
+              to="/login"
+              className="
+                hidden md:block
+                px-5 py-2
+                rounded-lg
+                bg-[#C85A32]
+                hover:bg-[#B44D28]
+                transition-all
+                duration-300
+                font-medium
+                text-white
+              "
+            >
+              Log in
+            </Link>
+          )}
 
         </div>
 

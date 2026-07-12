@@ -14,12 +14,24 @@ function Dashboard() {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
+        const token = localStorage.getItem("token");
+
         const statsResponse = await fetch(
-          "http://127.0.0.1:8000/dashboard/stats"
+          "http://127.0.0.1:8000/dashboard/stats",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
 
         const trendsResponse = await fetch(
-          "http://127.0.0.1:8000/dashboard/trends"
+          "http://127.0.0.1:8000/dashboard/trends",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
 
         const statsData = await statsResponse.json();
@@ -67,8 +79,6 @@ function Dashboard() {
 
       <main className="max-w-7xl mx-auto px-6 py-12">
 
-        {/* Header */}
-
         <div className="mb-10">
 
           <h1
@@ -97,8 +107,6 @@ function Dashboard() {
 
         </div>
 
-        {/* Metric Cards */}
-
         <div className="grid md:grid-cols-4 gap-6">
 
           <div className={`${cardStyle} rounded-3xl p-6`}>
@@ -113,7 +121,7 @@ function Dashboard() {
                   : "text-[#26211E]"
               }`}
             >
-              {stats.total_reviews}
+              {stats?.total_reviews || 0}
             </h2>
           </div>
 
@@ -129,7 +137,7 @@ function Dashboard() {
                   : "text-[#26211E]"
               }`}
             >
-              {stats.positive}
+              {stats?.positive || 0}
             </h2>
           </div>
 
@@ -145,7 +153,7 @@ function Dashboard() {
                   : "text-[#26211E]"
               }`}
             >
-              {stats.negative}
+              {stats?.negative || 0}
             </h2>
           </div>
 
@@ -161,17 +169,13 @@ function Dashboard() {
                   : "text-[#26211E]"
               }`}
             >
-              {stats.neutral}
+              {stats?.neutral || 0}
             </h2>
           </div>
 
         </div>
 
-        {/* Sentiments + Trends */}
-
         <div className="grid lg:grid-cols-2 gap-6 mt-10">
-
-          {/* Guest Sentiments */}
 
           <div className={`${cardStyle} rounded-3xl p-6`}>
 
@@ -190,7 +194,7 @@ function Dashboard() {
               <div>
                 <div className="flex justify-between">
                   <span>Positive</span>
-                  <span>{stats.positive}</span>
+                  <span>{stats?.positive || 0}</span>
                 </div>
 
                 <div
@@ -203,11 +207,9 @@ function Dashboard() {
                   <div
                     className="bg-[#C85A32] h-3 rounded-full"
                     style={{
-                      width: `${
-                        (stats.positive /
-                          stats.total_reviews) *
-                        100
-                      }%`,
+                      width: `${stats?.total_reviews
+                        ? (stats.positive / stats.total_reviews) * 100
+                        : 0}%`,
                     }}
                   />
                 </div>
@@ -216,7 +218,7 @@ function Dashboard() {
               <div>
                 <div className="flex justify-between">
                   <span>Neutral</span>
-                  <span>{stats.neutral}</span>
+                  <span>{stats?.neutral || 0}</span>
                 </div>
 
                 <div
@@ -229,11 +231,9 @@ function Dashboard() {
                   <div
                     className="bg-[#D3C7BC] h-3 rounded-full"
                     style={{
-                      width: `${
-                        (stats.neutral /
-                          stats.total_reviews) *
-                        100
-                      }%`,
+                      width: `${stats?.total_reviews
+                        ? (stats.neutral / stats.total_reviews) * 100
+                        : 0}%`,
                     }}
                   />
                 </div>
@@ -242,7 +242,7 @@ function Dashboard() {
               <div>
                 <div className="flex justify-between">
                   <span>Negative</span>
-                  <span>{stats.negative}</span>
+                  <span>{stats?.negative || 0}</span>
                 </div>
 
                 <div
@@ -255,11 +255,9 @@ function Dashboard() {
                   <div
                     className="bg-[#8B261E] h-3 rounded-full"
                     style={{
-                      width: `${
-                        (stats.negative /
-                          stats.total_reviews) *
-                        100
-                      }%`,
+                      width: `${stats?.total_reviews
+                        ? (stats.negative / stats.total_reviews) * 100
+                        : 0}%`,
                     }}
                   />
                 </div>
@@ -268,8 +266,6 @@ function Dashboard() {
             </div>
 
           </div>
-
-          {/* Review Frequency */}
 
           <div className={`${cardStyle} rounded-3xl p-6`}>
 
@@ -288,23 +284,14 @@ function Dashboard() {
               <div>
                 <div className="flex justify-between mb-2">
                   <span>Today</span>
-                  <span>{trends.today}</span>
+                  <span>{trends?.today || 0}</span>
                 </div>
 
-                <div
-                  className={`w-full rounded-full h-3 ${
-                    darkMode
-                      ? "bg-[#3A302A]"
-                      : "bg-[#F3ECE3]"
-                  }`}
-                >
+                <div className={`w-full rounded-full h-3 ${darkMode ? "bg-[#3A302A]" : "bg-[#F3ECE3]"}`}>
                   <div
                     className="bg-[#C85A32] h-3 rounded-full"
                     style={{
-                      width: `${Math.min(
-                        trends.today * 10,
-                        100
-                      )}%`,
+                      width: `${Math.min((trends?.today || 0) * 10, 100)}%`,
                     }}
                   />
                 </div>
@@ -313,23 +300,14 @@ function Dashboard() {
               <div>
                 <div className="flex justify-between mb-2">
                   <span>This Week</span>
-                  <span>{trends.this_week}</span>
+                  <span>{trends?.this_week || 0}</span>
                 </div>
 
-                <div
-                  className={`w-full rounded-full h-3 ${
-                    darkMode
-                      ? "bg-[#3A302A]"
-                      : "bg-[#F3ECE3]"
-                  }`}
-                >
+                <div className={`w-full rounded-full h-3 ${darkMode ? "bg-[#3A302A]" : "bg-[#F3ECE3]"}`}>
                   <div
                     className="bg-[#D3C7BC] h-3 rounded-full"
                     style={{
-                      width: `${Math.min(
-                        trends.this_week * 10,
-                        100
-                      )}%`,
+                      width: `${Math.min((trends?.this_week || 0) * 10, 100)}%`,
                     }}
                   />
                 </div>
@@ -338,23 +316,14 @@ function Dashboard() {
               <div>
                 <div className="flex justify-between mb-2">
                   <span>This Month</span>
-                  <span>{trends.this_month}</span>
+                  <span>{trends?.this_month || 0}</span>
                 </div>
 
-                <div
-                  className={`w-full rounded-full h-3 ${
-                    darkMode
-                      ? "bg-[#3A302A]"
-                      : "bg-[#F3ECE3]"
-                  }`}
-                >
+                <div className={`w-full rounded-full h-3 ${darkMode ? "bg-[#3A302A]" : "bg-[#F3ECE3]"}`}>
                   <div
                     className="bg-[#8B261E] h-3 rounded-full"
                     style={{
-                      width: `${Math.min(
-                        trends.this_month * 10,
-                        100
-                      )}%`,
+                      width: `${Math.min((trends?.this_month || 0) * 10, 100)}%`,
                     }}
                   />
                 </div>

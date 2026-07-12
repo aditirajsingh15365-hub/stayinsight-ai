@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 
 from database.dependencies import get_db
 from database.models import Review
+from database.auth_dependency import get_current_user
 
 router = APIRouter(
     prefix="/dashboard",
@@ -14,6 +15,7 @@ router = APIRouter(
 
 @router.get("/stats")
 def get_stats(
+    current_user=Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
 
@@ -52,6 +54,7 @@ def get_stats(
 
 @router.get("/trends")
 def get_trends(
+    current_user=Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
 

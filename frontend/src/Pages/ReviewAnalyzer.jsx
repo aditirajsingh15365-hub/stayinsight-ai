@@ -31,6 +31,22 @@ function ReviewAnalyzer() {
       );
 
       const data = await response.json();
+      await fetch(
+        "http://127.0.0.1:8000/reviews",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          review: review,
+          sentiment: data.sentiment,
+          theme: data.themes?.join(", "),
+          priority: data.priority,
+          }),
+        }
+      );
+
 
       setAnalysis({
         sentiment: data.sentiment,

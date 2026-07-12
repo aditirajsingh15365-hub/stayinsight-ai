@@ -13,12 +13,24 @@ function AIInsights() {
   useEffect(() => {
     const fetchInsights = async () => {
       try {
+        const token = localStorage.getItem("token");
+
         const insightsResponse = await fetch(
-          "http://127.0.0.1:8000/insights/"
+          "http://127.0.0.1:8000/insights/",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
 
         const recommendationsResponse = await fetch(
-          "http://127.0.0.1:8000/insights/recommendations"
+          "http://127.0.0.1:8000/insights/recommendations",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
 
         const insights = await insightsResponse.json();
@@ -91,8 +103,6 @@ function AIInsights() {
 
       <main className="max-w-7xl mx-auto px-6 py-12">
 
-        {/* Header */}
-
         <div className="mb-10">
 
           <span className="text-[#C85A32] font-semibold">
@@ -127,8 +137,6 @@ function AIInsights() {
 
         </div>
 
-        {/* Summary */}
-
         <div className={`${cardStyle} rounded-3xl p-8`}>
 
           <h2 className="text-2xl font-bold text-[#C85A32] mb-3">
@@ -146,8 +154,6 @@ function AIInsights() {
           </p>
 
         </div>
-
-        {/* Main Cards */}
 
         <div className="grid md:grid-cols-3 gap-6 mt-10">
 
@@ -217,8 +223,6 @@ function AIInsights() {
           </div>
 
         </div>
-
-        {/* Metrics */}
 
         <div
           className={`${cardStyle} rounded-3xl p-8 mt-10`}
