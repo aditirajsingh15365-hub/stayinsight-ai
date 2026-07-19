@@ -2,6 +2,7 @@ import { useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import ThemeLayout from "../components/ThemeLayout";
+import Loader from "../components/ui/Loader";
 import { useTheme } from "../context/ThemeContext";
 
 function ReviewAnalyzer() {
@@ -12,11 +13,16 @@ function ReviewAnalyzer() {
   const [analysis, setAnalysis] = useState(null);
 
   const handleAnalyze = async () => {
-    if (!review.trim()) return;
+    if (!review.trim()) {
+      alert("Please enter a review.");
+      return;
+    }
 
     setLoading(true);
+    setAnalysis(null);
 
     try {
+      // Analyze review using AI
       const response = await fetch(
         "http://127.0.0.1:8000/analyze-review",
         {
@@ -25,38 +31,47 @@ function ReviewAnalyzer() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            review,
+            review: review,
           }),
         }
       );
+
+      if (!response.ok) {
+        throw new Error("Failed to analyze review.");
+      }
 
       const data = await response.json();
-      await fetch(
+
+      // Save analyzed review to database
+      const saveResponse = await fetch(
         "http://127.0.0.1:8000/reviews",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          review: review,
-          sentiment: data.sentiment,
-          theme: data.themes?.join(", "),
-          priority: data.priority,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            review: review,
+            sentiment: data.sentiment,
+            theme: data.themes.join(", "),
+            priority: data.priority,
           }),
         }
       );
 
+      if (!saveResponse.ok) {
+        console.error("Review analysis succeeded, but saving failed.");
+      }
 
       setAnalysis({
         sentiment: data.sentiment,
-        theme: data.themes?.join(", "),
+        theme: data.themes.join(", "),
         priority: data.priority,
         response: data.suggested_response,
       });
     } catch (error) {
       console.error("API Error:", error);
-      alert("Failed to connect to backend.");
+      alert("Failed to analyze review. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -71,24 +86,19 @@ function ReviewAnalyzer() {
       <Navbar />
 
       <main className="max-w-7xl mx-auto px-6 py-12">
-
         {/* Header */}
 
         <div className="mb-10">
-
           <span className="text-[#C85A32] font-semibold">
             Guest Feedback Intelligence
           </span>
 
           <h1
             className={`text-4xl md:text-5xl font-bold font-serif mt-3 ${
-              darkMode
-                ? "text-[#F7F1EA]"
-                : "text-[#26211E]"
+              darkMode ? "text-[#F7F1EA]" : "text-[#26211E]"
             }`}
             style={{
-              fontFamily:
-                "'Playfair Display', Georgia, serif",
+              fontFamily: "'Playfair Display', Georgia, serif",
             }}
           >
             Review Experience Analyzer
@@ -96,9 +106,7 @@ function ReviewAnalyzer() {
 
           <p
             className={`mt-4 max-w-3xl ${
-              darkMode
-                ? "text-[#C8B8A6]"
-                : "text-[#61554E]"
+              darkMode ? "text-[#C8B8A6]" : "text-[#61554E]"
             }`}
           >
             Transform guest reviews into meaningful hospitality
@@ -106,24 +114,21 @@ function ReviewAnalyzer() {
             themes, prioritize improvements, and generate
             thoughtful guest responses.
           </p>
-
         </div>
 
         {/* Input Section */}
 
         <div className={`${cardStyle} rounded-3xl p-8`}>
-
           <label
             className={`text-lg font-medium ${
-              darkMode
-                ? "text-[#F7F1EA]"
-                : "text-[#26211E]"
+              darkMode ? "text-[#F7F1EA]" : "text-[#26211E]"
             }`}
           >
             Guest Review
           </label>
 
           <textarea
+            disabled={loading}
             value={review}
             onChange={(e) => setReview(e.target.value)}
             placeholder="Paste a guest review here..."
@@ -151,6 +156,7 @@ function ReviewAnalyzer() {
                     focus:border-[#C85A32]
                   `
               }
+              disabled:opacity-60
             `}
           />
 
@@ -169,13 +175,11 @@ function ReviewAnalyzer() {
               font-semibold
               text-white
               disabled:opacity-50
+              disabled:cursor-not-allowed
             "
           >
-            {loading
-              ? "Generating Insights..."
-              : "Generate Insights"}
+            {loading ? "Analyzing Review..." : "Generate Insights"}
           </button>
-
         </div>
 
         {/* Empty State */}
@@ -183,12 +187,32 @@ function ReviewAnalyzer() {
         {!analysis && !loading && (
           <div
             className={`mt-10 text-center ${
-              darkMode
-                ? "text-[#C8B8A6]"
-                : "text-[#61554E]"
+              darkMode ? "text-[#C8B8A6]" : "text-[#61554E]"
             }`}
           >
             Submit a review to uncover guest experience insights.
+          </div>
+        )}
+
+        {/* Loading State */}
+
+        {loading && (
+          <div className={`${cardStyle} rounded-3xl p-8 mt-10 text-center`}>
+            <Loader />
+
+            <h2 className="text-2xl font-bold text-[#C85A32] mt-4">
+              AI is analyzing your review...
+            </h2>
+
+            <p
+              className={`mt-3 ${
+                darkMode ? "text-[#C8B8A6]" : "text-[#61554E]"
+              }`}
+            >
+              Detecting sentiment, identifying key themes,
+              prioritizing concerns, and generating a professional
+              guest response.
+            </p>
           </div>
         )}
 
@@ -197,7 +221,6 @@ function ReviewAnalyzer() {
         {analysis && (
           <>
             <div className="grid md:grid-cols-3 gap-6 mt-10">
-
               <div className={`${cardStyle} rounded-3xl p-6`}>
                 <p className="text-[#61554E]">
                   Guest Sentiment
@@ -205,9 +228,7 @@ function ReviewAnalyzer() {
 
                 <h2
                   className={`text-3xl font-bold mt-3 ${
-                    darkMode
-                      ? "text-[#F7F1EA]"
-                      : "text-[#26211E]"
+                    darkMode ? "text-[#F7F1EA]" : "text-[#26211E]"
                   }`}
                 >
                   {analysis.sentiment}
@@ -233,29 +254,23 @@ function ReviewAnalyzer() {
                   {analysis.priority}
                 </h2>
               </div>
-
             </div>
 
             <div className={`${cardStyle} rounded-3xl p-8 mt-10`}>
-
               <h2 className="text-2xl font-bold text-[#C85A32] mb-4">
                 Suggested Guest Response
               </h2>
 
               <p
                 className={`leading-relaxed ${
-                  darkMode
-                    ? "text-[#C8B8A6]"
-                    : "text-[#61554E]"
+                  darkMode ? "text-[#C8B8A6]" : "text-[#61554E]"
                 }`}
               >
                 {analysis.response}
               </p>
-
             </div>
           </>
         )}
-
       </main>
 
       <Footer />

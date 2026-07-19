@@ -6,9 +6,8 @@ from schemas.review_schema import (
     ReviewResponse
 )
 
-from services.review_service import (
-    analyze_review_service
-)
+from services.ai_service import analyze_review_with_ai
+from services.review_service import analyze_review_service
 
 from database.models import Review
 from database.dependencies import get_db
@@ -173,10 +172,18 @@ def delete_review(
 def analyze_review(
     review: ReviewRequest
 ):
+    try:
+        return analyze_review_with_ai(
+            review.review
+        )
 
-    return analyze_review_service(
-        review.review
-    )
+    except Exception as e:
+        print(f"AI Error: {e}")
+
+        # Fallback to rule-based analyzer
+        return analyze_review_service(
+            review.review
+        )
 
 
 @router.post("/generate-response")

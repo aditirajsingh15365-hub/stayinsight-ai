@@ -24,6 +24,10 @@ function AIInsights() {
           }
         );
 
+        if (!insightsResponse.ok) {
+          throw new Error("Failed to fetch insights.");
+        }
+
         const recommendationsResponse = await fetch(
           "http://127.0.0.1:8000/insights/recommendations",
           {
@@ -33,6 +37,10 @@ function AIInsights() {
           }
         );
 
+        if (!recommendationsResponse.ok) {
+          throw new Error("Failed to fetch recommendations.");
+        }
+
         const insights = await insightsResponse.json();
         const recommendations =
           await recommendationsResponse.json();
@@ -40,13 +48,12 @@ function AIInsights() {
         setInsightsData({
           ...insights,
           recommendations:
-            recommendations.recommendations,
+            recommendations.recommendations || [],
         });
+
       } catch (error) {
-        console.error(
-          "Insights API Error:",
-          error
-        );
+        console.error("Insights API Error:", error);
+        setInsightsData(null);
       } finally {
         setLoading(false);
       }
@@ -72,7 +79,7 @@ function AIInsights() {
                 : "text-[#26211E]"
             }`}
           >
-            Loading Insights...
+            Generating AI Insights...
           </h1>
         </div>
 
@@ -171,7 +178,7 @@ function AIInsights() {
                   : "text-[#61554E]"
               }`}
             >
-              {insightsData.strengths.map((item) => (
+              {insightsData.strengths?.map((item) => (
                 <li key={item}>✓ {item}</li>
               ))}
             </ul>
@@ -192,7 +199,7 @@ function AIInsights() {
                   : "text-[#61554E]"
               }`}
             >
-              {insightsData.issues.map((item) => (
+              {insightsData.issues?.map((item) => (
                 <li key={item}>• {item}</li>
               ))}
             </ul>
@@ -213,7 +220,7 @@ function AIInsights() {
                   : "text-[#61554E]"
               }`}
             >
-              {insightsData.recommendations.map(
+              {insightsData.recommendations?.map(
                 (item) => (
                   <li key={item}>→ {item}</li>
                 )
@@ -252,7 +259,7 @@ function AIInsights() {
                     : "text-[#26211E]"
                 }`}
               >
-                {insightsData.metrics.sentimentAccuracy}%
+                {insightsData.metrics?.sentimentAccuracy ?? 0}%
               </h3>
             </div>
 
@@ -268,7 +275,7 @@ function AIInsights() {
                     : "text-[#26211E]"
                 }`}
               >
-                {insightsData.metrics.themeDetection}%
+                {insightsData.metrics?.themeDetection ?? 0}%
               </h3>
             </div>
 
@@ -284,7 +291,7 @@ function AIInsights() {
                     : "text-[#26211E]"
                 }`}
               >
-                {insightsData.metrics.recommendationQuality}%
+                {insightsData.metrics?.recommendationQuality ?? 0}%
               </h3>
             </div>
 
